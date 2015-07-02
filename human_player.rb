@@ -36,28 +36,10 @@ class HumanPlayer < Player
 
 	    case input
 	    when ' '
-	    	begin
-	      		board.select_pos(@color, @selected_moves)
-	      		return nil
-	      	rescue EmptyPieceError
-	      		return nil
-	      	end
+	    	return space_pressed
+	    	
 	    when "\r"
-	      result = [board.selected_pos, board.cursor_pos]
-	      return nil if result.first.nil?
-	      @selected_moves << result
-	      begin
-		      if board.can_move_more?(@selected_moves)
-		      	puts "can move more"
-		      	board.select_pos(@color, @selected_moves)
-		      	return nil
-		      else
-		      	puts "returning moves"
-		      	return @selected_moves
-		      end
-		  rescue InvalidMoveError
-		  	return nil
-		  end
+	        return enter_pressed
 
 	  	when "p"
 	  		return nil if @selected_moves == []
@@ -73,5 +55,32 @@ class HumanPlayer < Player
 	      board.move_cursor(KEYBINDINGS[input])
 	      return nil
 	    end
-	end    
+	end  
+
+	def space_pressed
+		begin
+  			board.select_pos(@color, @selected_moves)
+  			return nil
+  		rescue EmptyPieceError
+  			return nil
+	    end
+	end
+
+	def enter_pressed
+		result = [board.selected_pos, board.cursor_pos]
+      	return nil if result.first.nil?
+      	@selected_moves << result
+      	begin
+	      	if board.can_move_more?(@selected_moves)
+	      		puts "can move more"
+	      		board.select_pos(@color, @selected_moves)
+	      		return nil
+	      	else
+	      		puts "returning moves"
+	      		return @selected_moves
+	      	end
+	  	rescue InvalidMoveError
+	  		return nil
+	  	end  
+	end
  end

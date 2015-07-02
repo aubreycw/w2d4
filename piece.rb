@@ -25,6 +25,7 @@ class Piece
 
 	def perform_move(new_pos)
 		raise InvalidMoveError unless moves.include?(new_pos)
+
 		if valid_slide?(new_pos)
 			perform_slide(new_pos)
 			return
@@ -32,33 +33,31 @@ class Piece
 			perform_jump(new_pos)
 			return
 		end
+
 		raise InvalidMoveError
 	end
 
 	def perform_slide(new_pos)
-		unless valid_slide?(new_pos)
-			raise InvalidSlideError
-		end
+		raise InvalidSlideError unless valid_slide?(new_pos)
+
 		board.move_piece!(@pos, new_pos)
 		@pos = new_pos 
 		maybe_promote
 	end
 
 	def perform_jump(new_pos)
-		unless valid_jump?(new_pos)
-			raise InvalidJumpError
-		end
+		raise InvalidJumpError unless valid_jump?(new_pos)
 
 		#finds location of jumped piece
 		nr, nc = new_pos
 		cr, cc = @pos
-		jump_piece_row = cr + (nr - cr)/2
-		jump_piece_col = cc + (nc - cc)/2
+		jump_piece_pos = [cr + (nr - cr)/2, cc + (nc - cc)/2 ]
 
 		board.move_piece!(@pos, new_pos)
 		@pos = new_pos
-		board.take_piece!([jump_piece_row, jump_piece_col])
 		maybe_promote
+		board.take_piece!(jump_piece_pos)
+		
 	end
 
 	def valid_slide?(new_pos)

@@ -22,14 +22,13 @@ class Game
 					retry
 				end
 			end
-
 		puts "Game is over, #{@players.last.color} has won."
+		
 		rescue QuitGame
 			system("clear")
 			puts "Quitting now"
 			save_game_auto
 			sleep(1)
-			return nil
 		end
 	end
 
@@ -40,6 +39,7 @@ class Game
 			@players << @players.shift
 			return nil
 		end
+		sleep(1)
 		puts "invalid move sequence "
 	end
 
@@ -93,6 +93,8 @@ Game.load_game("last_quit")
 #do simple AI
 
 #do good AI
+
+#neated
 
 #do kings must capture or lose king (?)
 
