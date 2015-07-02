@@ -14,15 +14,19 @@ class Game
 
 	def play
 		begin 
-			until over?
+			@board.render
+			until over? || turns_with_no_takes > 20
 				begin
+					@board.render
 					play_turn
+					sleep(0.5)
 				rescue SaveGame
 					save_game
 					retry
 				end
 			end
-		puts "Game is over, #{@players.last.color} has won."
+		puts "Game is over, #{@players.last.color} has won." if turns_with_no_takes <= 20
+		puts "game is probably at a stalemate"
 		
 		rescue QuitGame
 			system("clear")
@@ -49,6 +53,10 @@ class Game
 
 	def over?
 		@board.over?
+	end
+
+	def turns_with_no_takes
+		@board.turns_with_no_takes
 	end
 
 	def test
@@ -81,25 +89,12 @@ class Game
 
 end
 
-white = ComputerPlayer.new(:white)
-black = ComputerPlayer.new(:black)
+white = ComputerPlayer.new(:white, 4)
+black = ComputerPlayer.new(:black, 3)
 
 game = Game.new(white, black)
 
-Game.load_game("last_quit")
+game.play
 
-#neaten
-
-#do simple AI
-
-#do good AI
-
-#neated
-
-#do kings must capture or lose king (?)
-
-
-
-
-
-
+#AI can double jump
+#alpha-beta pruning

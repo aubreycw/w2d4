@@ -2,7 +2,7 @@ require_relative 'errors'
 require 'colorize'
 
 class Piece
-	attr_reader :king, :color
+	attr_reader :king, :color, :pos
 	attr_accessor :board
 
 	def initialize(color, pos, board, king = false)

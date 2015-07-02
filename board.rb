@@ -13,13 +13,12 @@ class Board
 		@cursor_pos = [6,1]
 		@selected_pos = nil
 		@possible_moves = []
+		@turns_with_no_takes = 0
 	end
 
 	def select_pos(color, moves)
 		crow, ccol = @cursor_pos
-		puts "square to move to is color: #{@grid[crow][ccol].color.to_s}"
 		if [color, :none].include?(@grid[crow][ccol].color)
-			puts "inside if statement"
 			@selected_pos = @cursor_pos
 			update_possible_moves(moves)
 		end
@@ -60,6 +59,7 @@ class Board
 	end
 
 	def do_moves!(moves)
+		@turns_with_no_takes += 1
 		if moves.length == 1
 			move_piece(moves[0].first, moves[0].last)
 		else
@@ -80,7 +80,6 @@ class Board
 		#checks if there are any more jumps
 		puts [last_row, last_col].to_s
 		test_board = self.deep_dup
-		puts "moves are: #{moves.to_s}"
 		test_board.do_moves!(moves)
 		moves = test_board.grid[last_row][last_col].moves
 		puts moves.to_s
@@ -131,6 +130,7 @@ class Board
 	def take_piece!(pos)
 		r, c = pos
 		self.grid[r][c] = EmptyPiece.new
+		@turns_with_no_takes = 0
 	end
 
 	def over?
@@ -171,6 +171,10 @@ class Board
 
   	def on_board?(pos)
 		pos.all? { |coord| (0..9).to_a.include?(coord) }
+	end
+
+	def turns_with_no_takes
+		@turns_with_no_takes
 	end
 
   def deep_dup
