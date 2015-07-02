@@ -3,9 +3,11 @@ require_relative 'player'
 
 class Game
 	def initialize(player1, player2)
-		@players = [player1, player2]
 		@board = Board.new
 		@board.populate_board
+		player1.give_board(@board)
+		player2.give_board(@board)
+		@players = [player1, player2]
 	end
 
 	def play
@@ -16,8 +18,8 @@ class Game
 	end
 
 	def play_turn
-		moves = current_player.get_input
-		if board.valid_moves?(moves)
+		moves = curent_player.get_input
+		if board.valid_move_set?(moves)
 			board.do_moves(moves)
 			players << players.shift
 		end
@@ -54,7 +56,9 @@ sleep(1)
 board.move_piece([5,2], [3,0])
 board.render
 
-#write gameplay/cursor
-	#selecting multiple jumps if ok
-#write multiple jump move 
+#fill in board functions
+#update render
+#test cursor
+#test game finishes
+
 

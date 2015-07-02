@@ -7,6 +7,8 @@ class Piece
 
 	def initialize(color, pos, board, king = false)
 		@color, @pos, @board, @king = color, pos, board, king
+		@cursor_pos = [0,0]
+		@selected_pos = nil
 	end
 
 

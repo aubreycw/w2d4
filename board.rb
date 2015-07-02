@@ -8,15 +8,40 @@ class Board
 	def initialize
 		@grid = Array.new(10) { Array.new(10) {EmptyPiece.new} }
 		populate_board
+
+		@cursor_pos = [0,0]
+		@selected_pos = nil
 	end
 
-	def valid_moves
-		raise "valid_moves not implemented"
+	def select_pos
+		@selected_pos = @cursor_pos
 	end
-	
+
+	def cursor_pos
+		@cursor_pos
+	end
+
+	def move_cursor(diff)
+		cr, cc = @cursor_pos
+		dr, dc = diff
+		new_pos = [cr + dr, cc + dc]
+		if on_board?(new_pos)
+			@cursor = new_pos
+		end
+	end
+
 	def do_moves
 		raise "do_moves not implemented"
 	end
+
+	def can_move_more?
+		raise "can_move_more? not implemented"
+	end
+
+	def valid_move_set
+		raise "valid_move_set not implemented"
+	end
+	
 
 	def populate_board
 		(0..3).each do |row|
@@ -91,5 +116,9 @@ class Board
   		 print elem.to_s.on_light_red
   		end
   	end
+
+  	def on_board?(pos)
+		pos.all? { |coord| (0..9).to_a.include?(coord) }
+	end
 
 end
