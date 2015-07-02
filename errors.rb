@@ -1,0 +1,3 @@
+
+class InvalidSlideError < StandardError
+end
