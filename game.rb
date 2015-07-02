@@ -1,5 +1,6 @@
 require_relative 'board'
 require_relative 'player'
+require 'yaml'
 
 class Game
 	def initialize(player1, player2)
@@ -12,22 +13,28 @@ class Game
 
 	def play
 		until over?
-			play_turn
+			begin
+				play_turn
+			rescue SaveGame 
+				save_game
+				retry
+			end
 		end
 		puts "Game is over, #{players.last} has won."
 	end
 
 	def play_turn
-		moves = curent_player.get_input
-		if board.valid_move_set?(moves)
-			board.do_moves(moves)
-			players << players.shift
+		moves = current_player.get_input
+		if @board.valid_move_set?(moves)
+			@board.do_moves!(moves)
+			@players << @players.shift
+			return nil
 		end
 		puts "invalid move sequence "
 	end
 
 	def current_player
-		players.first
+		@players.first
 	end
 
 	def over?
@@ -38,27 +45,35 @@ class Game
 		@board.render
 	end
 
+	def self.load_game(file_name)
+		save = File.read(file_name+".yml")
+     	YAML::load(save).play
+	end
+
+	def save_game
+    	print "Enter the name you want your savefile to have (q to cancel): "
+    	savename = "#{gets.chomp}.yml"
+    	return if savename.downcase == "q.yml"
+   	 	File.open(savename, 'w') do |f|
+    	  f.puts self.to_yaml
+    	end
+
+    	puts "Game has been saved."
+    	sleep(1)
+    	return
+  end
 end
 
-white = Player.new(:white)
-black = Player.new(:black)
+white = HumanPlayer.new(:white)
+black = HumanPlayer.new(:black)
 
 game = Game.new(white, black)
 
-board = Board.new
-board.render
-board.move_piece([3,0], [4,1])
-board.render
-sleep(1)
-board.move_piece([6,3],[5,2])
-board.render
-sleep(1)
-board.move_piece([5,2], [3,0])
-board.render
+Game.load_game("test")
 
-#fill in board functions
-#update render
 #test cursor
 #test game finishes
+
+#do kings must capture or lose king
 
 

@@ -1,6 +1,9 @@
 class InvalidMoveError < StandardError
 end
 
+class SaveGame < StandardError
+end
+
 class InvalidJumpError < InvalidMoveError
 end
 

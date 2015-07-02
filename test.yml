@@ -1,0 +1,349 @@
+--- !ruby/object:Game
+board: &1 !ruby/object:Board
+  grid:
+  - - !ruby/object:EmptyPiece {}
+    - !ruby/object:Piece
+      color: :black
+      pos:
+      - 0
+      - 1
+      board: *1
+      king: false
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:Piece
+      color: :black
+      pos:
+      - 0
+      - 5
+      board: *1
+      king: false
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:Piece
+      color: :black
+      pos:
+      - 0
+      - 7
+      board: *1
+      king: false
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:Piece
+      color: :black
+      pos:
+      - 0
+      - 9
+      board: *1
+      king: false
+  - - !ruby/object:Piece
+      color: :black
+      pos:
+      - 1
+      - 0
+      board: *1
+      king: false
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:Piece
+      color: :black
+      pos: &2
+      - 1
+      - 2
+      board: *1
+      king: false
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:Piece
+      color: :white
+      pos:
+      - 1
+      - 4
+      board: *1
+      king: false
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:Piece
+      color: :black
+      pos:
+      - 1
+      - 6
+      board: *1
+      king: false
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:Piece
+      color: :black
+      pos:
+      - 1
+      - 8
+      board: *1
+      king: false
+    - !ruby/object:EmptyPiece {}
+  - - !ruby/object:EmptyPiece {}
+    - !ruby/object:Piece
+      color: :black
+      pos:
+      - 2
+      - 1
+      board: *1
+      king: false
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:Piece
+      color: :black
+      pos:
+      - 2
+      - 3
+      board: *1
+      king: false
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:Piece
+      color: :black
+      pos:
+      - 2
+      - 5
+      board: *1
+      king: false
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:Piece
+      color: :black
+      pos:
+      - 2
+      - 7
+      board: *1
+      king: false
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:Piece
+      color: :black
+      pos:
+      - 2
+      - 9
+      board: *1
+      king: false
+  - - !ruby/object:Piece
+      color: :black
+      pos:
+      - 3
+      - 0
+      board: *1
+      king: false
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:Piece
+      color: :black
+      pos:
+      - 3
+      - 2
+      board: *1
+      king: false
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:Piece
+      color: :black
+      pos:
+      - 3
+      - 4
+      board: *1
+      king: false
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:Piece
+      color: :black
+      pos:
+      - 3
+      - 6
+      board: *1
+      king: false
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:Piece
+      color: :black
+      pos:
+      - 3
+      - 8
+      board: *1
+      king: false
+    - !ruby/object:EmptyPiece {}
+  - - !ruby/object:EmptyPiece {}
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:EmptyPiece {}
+  - - !ruby/object:Piece
+      color: :white
+      pos:
+      - 5
+      - 0
+      board: *1
+      king: false
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:Piece
+      color: :white
+      pos:
+      - 5
+      - 4
+      board: *1
+      king: false
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:Piece
+      color: :white
+      pos:
+      - 5
+      - 6
+      board: *1
+      king: false
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:EmptyPiece {}
+  - - !ruby/object:EmptyPiece {}
+    - !ruby/object:Piece
+      color: :white
+      pos:
+      - 6
+      - 1
+      board: *1
+      king: false
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:Piece
+      color: :white
+      pos:
+      - 6
+      - 9
+      board: *1
+      king: false
+  - - !ruby/object:Piece
+      color: :white
+      pos:
+      - 7
+      - 0
+      board: *1
+      king: false
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:Piece
+      color: :white
+      pos:
+      - 7
+      - 2
+      board: *1
+      king: false
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:Piece
+      color: :white
+      pos:
+      - 7
+      - 4
+      board: *1
+      king: false
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:Piece
+      color: :white
+      pos:
+      - 7
+      - 6
+      board: *1
+      king: false
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:Piece
+      color: :white
+      pos:
+      - 7
+      - 8
+      board: *1
+      king: false
+    - !ruby/object:EmptyPiece {}
+  - - !ruby/object:EmptyPiece {}
+    - !ruby/object:Piece
+      color: :white
+      pos:
+      - 8
+      - 1
+      board: *1
+      king: false
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:Piece
+      color: :white
+      pos:
+      - 8
+      - 5
+      board: *1
+      king: false
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:Piece
+      color: :white
+      pos:
+      - 8
+      - 7
+      board: *1
+      king: false
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:Piece
+      color: :white
+      pos:
+      - 8
+      - 9
+      board: *1
+      king: false
+  - - !ruby/object:Piece
+      color: :white
+      pos:
+      - 9
+      - 0
+      board: *1
+      king: false
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:Piece
+      color: :white
+      pos:
+      - 9
+      - 2
+      board: *1
+      king: false
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:Piece
+      color: :white
+      pos:
+      - 9
+      - 4
+      board: *1
+      king: false
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:Piece
+      color: :white
+      pos:
+      - 9
+      - 6
+      board: *1
+      king: false
+    - !ruby/object:EmptyPiece {}
+    - !ruby/object:Piece
+      color: :white
+      pos:
+      - 9
+      - 8
+      board: *1
+      king: false
+    - !ruby/object:EmptyPiece {}
+  cursor_pos: *2
+  selected_pos: &3
+  - 0
+  - 3
+  possible_moves:
+  - - 1
+    - 2
+players:
+- !ruby/object:HumanPlayer
+  color: :white
+  board: *1
+  selected_moves: []
+- !ruby/object:HumanPlayer
+  color: :black
+  board: *1
+  selected_moves:
+  - - *3
+    - *2

@@ -1,4 +1,4 @@
-require "IO/console"
+require 'io/console'
 
 class Player
 	attr_accessor :board, :color
@@ -23,7 +23,13 @@ class HumanPlayer < Player
   's' => [1, 0],  'd' => [0, 1]
 	}
 
+
+	def initialize(color)
+		super
+		@selected_moves = []
+	end
 	def get_input
+		@selected_moves = []
 		input = nil
 		until input
 			input = input_from_cursor("it is #{color.to_s}'s turn")
@@ -33,40 +39,46 @@ class HumanPlayer < Player
 
 	def get_key
 		input = $stdin.getch
-		return input if ['w', 'a', 's', 'd', 'p', ' ', "\r"].include?(input)
+		return input if ['w', 'a', 's', 'd', 'p', ' ', 'l', 'q', "\r"].include?(input)
 		get_key
 	end
 
 	def input_from_cursor(message)
-    board.render
-    puts message
-    selected_moves = []
+	    board.render
+	    puts message
+		input = get_key
 
-    input = get_key # Player#get_input rescues bad input
-    case input
-    when ' '
-      board.select_pos(@color)
-      return nil
+	    case input
+	    when ' '
+	      board.select_pos(@color, @selected_moves)
+	      return nil
 
-    when "\r"
-      result = board.cursor_pos
-      return nil if result.nil?
-      if board.can_move_more?
-      	selected_moves << result
-      	return nil
-      else
-      	return selected_moves
-      end
+	    when "\r"
+	      result = [board.selected_pos, board.cursor_pos]
+	      return nil if result.first.nil?
+	      @selected_moves << result
+	      if board.can_move_more?(@selected_moves)
+	      	puts "can move more"
+	      	board.select_pos(@color, @selected_moves)
+	      	return nil
+	      else
+	      	puts "returning moves"
+	      	return @selected_moves
+	      end
 
-  	when "p"
-  		return nil if selected_moves == []
-  		return selected_moves
-  	end
+	  	when "p"
+	  		return nil if @selected_moves == []
+	  		return @selected_moves
 
-    else
-      board.move_cursor(KEYBINDINGS[input])
-      return nil
-    end
-  end
+	  	when "q"
+	  		raise "quitting now"
 
-end
+	  	when "l"
+	  		raise SaveGame
+
+	    else
+	      board.move_cursor(KEYBINDINGS[input])
+	      return nil
+	    end
+	end    
+ end

@@ -20,8 +20,7 @@ class EmptyPiece
 		raise EmptyPieceError
 	end
 
-	def dup
-		puts "duping EmptyPiece"
+	def dup(board)
 		EmptyPiece.new
 	end
 end

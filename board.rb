@@ -1,4 +1,5 @@
 require_relative 'piece'
+require_relative 'errors'
 require_relative 'empty_piece'
 require 'colorize'
 
@@ -9,16 +10,39 @@ class Board
 		@grid = Array.new(10) { Array.new(10) {EmptyPiece.new} }
 		populate_board
 
-		@cursor_pos = [0,0]
+		@cursor_pos = [6,1]
 		@selected_pos = nil
+		@possible_moves = []
 	end
 
-	def select_pos
-		@selected_pos = @cursor_pos
+	def select_pos(color, moves)
+		crow, ccol = @cursor_pos
+		puts "square to move to is color: #{@grid[crow][ccol].color.to_s}"
+		if [color, :none].include?(@grid[crow][ccol].color)
+			puts "inside if statement"
+			@selected_pos = @cursor_pos
+			update_possible_moves(moves)
+		end
+	end
+
+	def update_possible_moves(moves)
+		if moves == []
+			row, col = @selected_pos
+			@possible_moves = @grid[row][col].moves
+		else
+			last_row, last_col = moves.last.last
+			test_board = self.deep_dup
+			test_board.do_moves!(moves)
+			@possible_moves = test_board.grid[last_row][last_col].moves
+		end
 	end
 
 	def cursor_pos
 		@cursor_pos
+	end
+
+	def selected_pos
+		@selected_pos
 	end
 
 	def move_cursor(diff)
@@ -26,22 +50,47 @@ class Board
 		dr, dc = diff
 		new_pos = [cr + dr, cc + dc]
 		if on_board?(new_pos)
-			@cursor = new_pos
+			@cursor_pos = new_pos
 		end
 	end
 
-	def do_moves
-		raise "do_moves not implemented"
+	def do_moves(moves)
+		raise InvalidMoveError unless valid_move_set(moves)
+		do_moves!(moves)
 	end
 
-	def can_move_more?
-		raise "can_move_more? not implemented"
+	def do_moves!(moves)
+		if moves.length == 1
+			move_piece(moves[0].first, moves[0].last)
+		else
+			move_piece(moves[0].first, moves[0].last)
+			do_moves!(moves.drop(1))
+		end
 	end
 
-	def valid_move_set
-		raise "valid_move_set not implemented"
+	def can_move_more?(moves)
+		last_row, last_col = moves.last.last
+		puts [last_row, last_col].to_s
+		test_board = self.deep_dup
+		puts "moves are: #{moves.to_s}"
+		test_board.do_moves!(moves)
+		moves = test_board.grid[last_row][last_col].moves
+		puts moves.to_s
+		moves.select do |move| 
+			(last_row - move[0]).abs == 2  && (last_col - move[1]).abs == 2 
+		end != []
 	end
-	
+
+	def valid_move_set?(moves)
+		begin 
+			test_board = self.deep_dup
+			test_board.do_moves!(moves)
+		rescue InvalidMoveError
+			return false
+		end
+		return true
+	end
+
 
 	def populate_board
 		(0..3).each do |row|
@@ -65,7 +114,6 @@ class Board
 	end
 
 	def move_piece!(origin, dest)
-		puts "moving piece!"
 		rd, cd = dest
 		ro, co = origin
 		self.grid[rd][cd] = self.grid[ro][co]
@@ -87,16 +135,6 @@ class Board
 		pieces[:white] == 0 || pieces[:black] == 0
 	end
 
-	def [](pos)
-    	row, col = pos
-    	@grid[row][col]
-  	end
-
-  	def []=(pos, input)
-    	row, col = pos
-    	@grid[row][col] = input
-  	end
-
   	def render
   		system("clear")
   		puts "   0  1  2  3  4  5  6  7  8  9"
@@ -110,7 +148,13 @@ class Board
   	end
 
   	def render_elem(elem, ridx, cidx)
-  		if (ridx + cidx) % 2 == 1
+  		if [ridx, cidx] == @cursor_pos
+  			print elem.to_s.on_magenta
+  		elsif [ridx, cidx] == @selected_pos
+  			print elem.to_s.on_blue
+  		elsif @possible_moves.include?([ridx, cidx])
+  			print elem.to_s.on_light_blue
+  		elsif (ridx + cidx) % 2 == 1
   			print elem.to_s.on_red
   		else
   		 print elem.to_s.on_light_red
@@ -120,5 +164,25 @@ class Board
   	def on_board?(pos)
 		pos.all? { |coord| (0..9).to_a.include?(coord) }
 	end
+
+  def deep_dup
+    test_board = Board.new
+    grid.each_with_index do |row, ridx|
+      row.each_with_index do |elem, cidx|
+        test_board.grid[ridx][cidx] = elem.dup(test_board)
+      end
+    end
+	test_board
+  end
+
+  def grid
+  	@grid
+  end
+
+  def empty?(pos)
+  	row, col = pos
+  	@grid[row][col].empty?
+  end
+
 
 end

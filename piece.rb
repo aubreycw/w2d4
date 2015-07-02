@@ -7,8 +7,6 @@ class Piece
 
 	def initialize(color, pos, board, king = false)
 		@color, @pos, @board, @king = color, pos, board, king
-		@cursor_pos = [0,0]
-		@selected_pos = nil
 	end
 
 
@@ -16,9 +14,9 @@ class Piece
 		all_moves = []
 		row, col = @pos
 		move_diffs.each do |move_diff|
-			drow1, dcol1 = move_diff
+			drow, dcol = move_diff
 			new_move = [row + drow, col + dcol]
-			if is_valid_slide?(new_move) || is_valid_jump?(new_move)
+			if valid_slide?(new_move) || valid_jump?(new_move)
 				all_moves << new_move
 			end
 		end
@@ -26,13 +24,10 @@ class Piece
 	end
 
 	def perform_move(new_pos)
-		puts "performing move"
 		if valid_slide?(new_pos)
-			puts "valid slide"
-			perform_slide(new_pos) 
+			perform_slide(new_pos)
 			return
 		elsif valid_jump?(new_pos)
-			puts "valid jump"
 			perform_jump(new_pos)
 			return
 		end
@@ -45,6 +40,7 @@ class Piece
 		end
 		board.move_piece!(@pos, new_pos)
 		@pos = new_pos 
+		maybe_promote
 	end
 
 	def perform_jump(new_pos)
@@ -61,15 +57,16 @@ class Piece
 		board.move_piece!(@pos, new_pos)
 		@pos = new_pos
 		board.take_piece!([jump_piece_row, jump_piece_col])
+		maybe_promote
 	end
 
 	def valid_slide?(new_pos)
-		return false unless on_board?(new_pos) && board[new_pos].empty?
+		return false unless on_board?(new_pos) && board.empty?(new_pos)
 		new_pos.zip(@pos).all? {|new_p, current_p| (new_p - current_p).abs == 1}
 	end
 
 	def valid_jump?(new_pos)
-		return false unless on_board?(new_pos) && board[new_pos].empty?
+		return false unless on_board?(new_pos) && board.empty?(new_pos)
 		return false unless new_pos.zip(@pos).all? do |new_p, current_p|
 			 (new_p - current_p).abs == 2
 		end
@@ -79,7 +76,7 @@ class Piece
 		cr, cc = @pos
 		jump_piece_row = cr + (nr - cr)/2
 		jump_piece_col = cc + (nc - cc)/2
-		jump_piece = board[[jump_piece_row, jump_piece_col]]
+		jump_piece = board.grid[jump_piece_row][jump_piece_col]
 
 		!jump_piece.empty? && jump_piece.color != self.color
 	end
@@ -95,10 +92,10 @@ class Piece
 
 	def maybe_promote
 		return false if king?
-		if self.color == :black && pos[0] == 9
+		if self.color == :black && @pos[0] == 9
 			@king = true
 			return true
-		elsif self.color == :white && pos[0] == 0
+		elsif self.color == :white && @pos[0] == 0
 			@king = true
 			return true
 		end
@@ -122,9 +119,8 @@ class Piece
 		" ⬤ ".colorize(color)
 	end
 
-	def dup
-		puts "duping piece"
-		Piece.new(@color, @pos, @board, @king)
+	def dup(board)
+		Piece.new(@color, @pos, board, @king)
 	end
 
 end
