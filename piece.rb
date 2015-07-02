@@ -8,7 +8,18 @@ class Piece
 		@color, @board, @pos, @king = color, board, pos, king
 	end
 
+
 	def moves
+		all_moves = []
+		row, col = @pos
+		move_diffs.each do |move_diff|
+			drow1, dcol1 = move_diff
+			new_move = [row + drow, col + dcol]
+			if is_valid_slide?(new_move) || is_valid_jump?(new_move)
+				all_moves << new_move
+			end
+		end
+		all_moves
 	end
 
 	def perform_slide(new_pos)
@@ -40,15 +51,29 @@ class Piece
 		new_pos.zip(@pos).all? {|new_p, current_p| abs(new_p - current_p) == 1}
 	end
 
-	def valid_jump(new_pos)
+	def valid_jump?(new_pos)
 		return false unless on_board?(new_pos) && board[new_pos].empty?
+		return false unless new_pos.zip(@pos).all? do |new_p, current_p|
+			 abs(new_p - current_p) == 2
+		end
 
+		#finds location of jumped piece
+		nr, nc = new_pos
+		cr, cc = @pos
+		jump_piece_row = cr + (nr - cr)/2
+		jump_piece_col = cc + (nc - cc)/2
+		jump_piece = board[jump_piece_row, jump_piece_col]
+
+		!jump_piece.empty? && jump_piece.color != self.color
 	end
 
 	def move_diffs
-		return [[1, 1], [1, -1], [-1, 1], [-1, -1]] if king?
+		if king?
+			return [[1, 1], [1, -1], [-1, 1], [-1, -1],
+					[2, 2], [2, -2], [-2, 2], [-2, -2]]
+		end
 		dir = @color == :black ? 1 : -1
-		[[dir, 1], [dir, -1]]
+		[[dir, 1], [dir, -1], [dir*2, 2], [dir*2, -2]]
 	end
 
 	def maybe_promote
@@ -69,6 +94,10 @@ class Piece
 
 	def on_board?(pos)
 		pos.all? { |coord| (0..9).to_a.include?(coord) }
+	end
+
+	def empty?
+		false
 	end
 
 end
