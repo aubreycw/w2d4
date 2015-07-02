@@ -64,12 +64,12 @@ class Game
   end
 end
 
-white = HumanPlayer.new(:white)
-black = HumanPlayer.new(:black)
+white = ComputerPlayer.new(:white)
+black = ComputerPlayer.new(:black)
 
 game = Game.new(white, black)
 
-Game.load_game("test")
+Game.play
 
 #neaten
 
