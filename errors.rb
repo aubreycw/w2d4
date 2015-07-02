@@ -4,6 +4,9 @@ end
 class SaveGame < StandardError
 end
 
+class QuitGame < StandardError
+end
+
 class InvalidJumpError < InvalidMoveError
 end
 

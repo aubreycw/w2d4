@@ -191,6 +191,4 @@ class Board
   	row, col = pos
   	@grid[row][col].empty?
   end
-
-
 end

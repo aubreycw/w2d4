@@ -1,5 +1,6 @@
 require_relative 'board'
-require_relative 'player'
+require_relative 'human_player'
+require_relative 'computer_player'
 require 'yaml'
 
 class Game
@@ -12,15 +13,24 @@ class Game
 	end
 
 	def play
-		until over?
-			begin
-				play_turn
-			rescue SaveGame 
-				save_game
-				retry
+		begin 
+			until over?
+				begin
+					play_turn
+				rescue SaveGame
+					save_game
+					retry
+				end
 			end
-		end
+
 		puts "Game is over, #{@players.last.color} has won."
+		rescue QuitGame
+			system("clear")
+			puts "Quitting now"
+			save_game_auto
+			sleep(1)
+			return nil
+		end
 	end
 
 	def play_turn
@@ -61,7 +71,14 @@ class Game
     	puts "Game has been saved."
     	sleep(1)
     	return
-  end
+ 	 end
+
+ 	 def save_game_auto
+ 	 	File.open("last_quit.yml", 'w') do |f|
+    	  f.puts self.to_yaml
+    	end
+ 	 end
+
 end
 
 white = ComputerPlayer.new(:white)
@@ -69,7 +86,7 @@ black = ComputerPlayer.new(:black)
 
 game = Game.new(white, black)
 
-Game.play
+Game.load_game("last_quit")
 
 #neaten
 

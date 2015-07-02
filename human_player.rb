@@ -1,4 +1,5 @@
 require_relative 'player'
+require_relative 'errors'
 require 'io/console'
 
 class HumanPlayer < Player
@@ -63,10 +64,10 @@ class HumanPlayer < Player
 	  		return @selected_moves
 
 	  	when "q"
-	  		raise "quitting now"
+	  		raise QuitGame, "q"
 
 	  	when "l"
-	  		raise SaveGame
+	  		raise SaveGame, "s"
 
 	    else
 	      board.move_cursor(KEYBINDINGS[input])
