@@ -1,11 +1,12 @@
 require_relative 'errors'
+require 'colorize'
 
 class Piece
 	attr_reader :king, :color
 	attr_accessor :board
 
-	def initialize(color, board, pos, king = false)
-		@color, @board, @pos, @king = color, board, pos, king
+	def initialize(color, pos, board, king = false)
+		@color, @pos, @board, @king = color, pos, board, king
 	end
 
 
@@ -22,12 +23,26 @@ class Piece
 		all_moves
 	end
 
+	def perform_move(new_pos)
+		puts "performing move"
+		if valid_slide?(new_pos)
+			puts "valid slide"
+			perform_slide(new_pos) 
+			return
+		elsif valid_jump?(new_pos)
+			puts "valid jump"
+			perform_jump(new_pos)
+			return
+		end
+		raise InvalidMoveError
+	end
+
 	def perform_slide(new_pos)
 		unless valid_slide?(new_pos)
 			raise InvalidSlideError
 		end
+		board.move_piece!(@pos, new_pos)
 		@pos = new_pos 
-		board.move_piece!(self, pos)
 	end
 
 	def perform_jump(new_pos)
@@ -41,20 +56,20 @@ class Piece
 		jump_piece_row = cr + (nr - cr)/2
 		jump_piece_col = cc + (nc - cc)/2
 
+		board.move_piece!(@pos, new_pos)
 		@pos = new_pos
-		board.move_piece!(self, pos)
-		board.take_piece([jump_piece_row, jump_piece_col]])
+		board.take_piece!([jump_piece_row, jump_piece_col])
 	end
 
 	def valid_slide?(new_pos)
 		return false unless on_board?(new_pos) && board[new_pos].empty?
-		new_pos.zip(@pos).all? {|new_p, current_p| abs(new_p - current_p) == 1}
+		new_pos.zip(@pos).all? {|new_p, current_p| (new_p - current_p).abs == 1}
 	end
 
 	def valid_jump?(new_pos)
 		return false unless on_board?(new_pos) && board[new_pos].empty?
 		return false unless new_pos.zip(@pos).all? do |new_p, current_p|
-			 abs(new_p - current_p) == 2
+			 (new_p - current_p).abs == 2
 		end
 
 		#finds location of jumped piece
@@ -62,7 +77,7 @@ class Piece
 		cr, cc = @pos
 		jump_piece_row = cr + (nr - cr)/2
 		jump_piece_col = cc + (nc - cc)/2
-		jump_piece = board[jump_piece_row, jump_piece_col]
+		jump_piece = board[[jump_piece_row, jump_piece_col]]
 
 		!jump_piece.empty? && jump_piece.color != self.color
 	end
@@ -98,6 +113,16 @@ class Piece
 
 	def empty?
 		false
+	end
+
+	def to_s
+		return " ♛ ".colorize(color)if king?
+		" ⬤ ".colorize(color)
+	end
+
+	def dup
+		puts "duping piece"
+		Piece.new(@color, @pos, @board, @king)
 	end
 
 end
