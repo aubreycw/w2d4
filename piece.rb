@@ -24,6 +24,7 @@ class Piece
 	end
 
 	def perform_move(new_pos)
+		raise InvalidMoveError unless moves.include?(new_pos)
 		if valid_slide?(new_pos)
 			perform_slide(new_pos)
 			return

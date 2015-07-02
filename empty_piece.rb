@@ -23,4 +23,8 @@ class EmptyPiece
 	def dup(board)
 		EmptyPiece.new
 	end
+
+	def moves
+		raise EmptyPieceError
+	end
 end

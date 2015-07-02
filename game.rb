@@ -20,7 +20,7 @@ class Game
 				retry
 			end
 		end
-		puts "Game is over, #{players.last} has won."
+		puts "Game is over, #{@players.last.color} has won."
 	end
 
 	def play_turn
@@ -71,9 +71,16 @@ game = Game.new(white, black)
 
 Game.load_game("test")
 
-#test cursor
-#test game finishes
+#neaten
 
-#do kings must capture or lose king
+#do simple AI
+
+#do good AI
+
+#do kings must capture or lose king (?)
+
+
+
+
 
 

@@ -69,7 +69,15 @@ class Board
 	end
 
 	def can_move_more?(moves)
+		from_row, from_col= moves.last.first
 		last_row, last_col = moves.last.last
+
+		#checks that last move was a jump
+		unless (from_row - last_row).abs + (from_col - last_col).abs == 4
+			return false
+		end
+
+		#checks if there are any more jumps
 		puts [last_row, last_col].to_s
 		test_board = self.deep_dup
 		puts "moves are: #{moves.to_s}"

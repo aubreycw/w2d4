@@ -50,21 +50,28 @@ class HumanPlayer < Player
 
 	    case input
 	    when ' '
-	      board.select_pos(@color, @selected_moves)
-	      return nil
-
+	    	begin
+	      		board.select_pos(@color, @selected_moves)
+	      		return nil
+	      	rescue EmptyPieceError
+	      		return nil
+	      	end
 	    when "\r"
 	      result = [board.selected_pos, board.cursor_pos]
 	      return nil if result.first.nil?
 	      @selected_moves << result
-	      if board.can_move_more?(@selected_moves)
-	      	puts "can move more"
-	      	board.select_pos(@color, @selected_moves)
-	      	return nil
-	      else
-	      	puts "returning moves"
-	      	return @selected_moves
-	      end
+	      begin
+		      if board.can_move_more?(@selected_moves)
+		      	puts "can move more"
+		      	board.select_pos(@color, @selected_moves)
+		      	return nil
+		      else
+		      	puts "returning moves"
+		      	return @selected_moves
+		      end
+		  rescue InvalidMoveError
+		  	return nil
+		  end
 
 	  	when "p"
 	  		return nil if @selected_moves == []
