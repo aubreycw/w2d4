@@ -27,4 +27,8 @@ class EmptyPiece
 	def moves
 		raise EmptyPieceError
 	end
+
+	def has_no_moves(xcolor)
+		true
+	end
 end

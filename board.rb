@@ -177,6 +177,10 @@ class Board
 		@turns_with_no_takes
 	end
 
+	def stalemate?(color)
+		@grid.flatten.all? { |piece| piece.has_no_moves(color) }
+	end
+
   def deep_dup
     test_board = Board.new
     grid.each_with_index do |row, ridx|

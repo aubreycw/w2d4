@@ -15,7 +15,7 @@ class Game
 	def play
 		begin 
 			@board.render
-			until over? || turns_with_no_takes > 20
+			until over?(current_player.color) || turns_with_no_takes > 20
 				begin
 					@board.render
 					play_turn
@@ -51,8 +51,8 @@ class Game
 		@players.first
 	end
 
-	def over?
-		@board.over?
+	def over?(color)
+		@board.over? || @board.stalemate?(color)
 	end
 
 	def turns_with_no_takes
@@ -89,7 +89,7 @@ class Game
 
 end
 
-white = ComputerPlayer.new(:white, 4)
+white = ComputerPlayer.new(:white, 2)
 black = ComputerPlayer.new(:black, 3)
 
 game = Game.new(white, black)

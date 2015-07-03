@@ -9,6 +9,10 @@ class Piece
 		@color, @pos, @board, @king = color, pos, board, king
 	end
 
+	def has_no_moves(xcolor)
+		return true if @color != xcolor
+		moves == []
+	end
 
 	def moves
 		all_moves = []
