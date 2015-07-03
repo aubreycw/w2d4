@@ -16,14 +16,13 @@ class ComputerPlayer < Player
 		possible_boards = possible_moves.map { |move| make_move(board, [move]) }
 		values = possible_boards.map { |board| minimax(@n-1, board, true)}
 		best_index = values.each_with_index.max[1]
-		result = possible_moves[best_index]
-		puts result.to_s
-		[result]
+		[possible_moves[best_index]]
 	end
 
 	def minimax(n, board, my_turn)
 		return value(board) if n == 0
 		return value(board) if board.over?
+		return -20 if board.stalemate?(@color)
 		
 		if my_turn
 			possible_moves = moves(board, @color)

@@ -19,14 +19,16 @@ class Game
 				begin
 					@board.render
 					play_turn
-					sleep(0.5)
 				rescue SaveGame
 					save_game
 					retry
 				end
 			end
-		puts "Game is over, #{@players.last.color} has won." if turns_with_no_takes <= 20
-		puts "game is probably at a stalemate"
+		if turns_with_no_takes <= 20
+			puts "Game is over, #{@players.last.color} has won." 
+		else
+			puts "game is probably at a stalemate"
+		end
 		
 		rescue QuitGame
 			system("clear")
@@ -90,7 +92,7 @@ class Game
 end
 
 white = ComputerPlayer.new(:white, 2)
-black = ComputerPlayer.new(:black, 3)
+black = ComputerPlayer.new(:black, 4)
 
 game = Game.new(white, black)
 

@@ -72,11 +72,9 @@ class HumanPlayer < Player
       	@selected_moves << result
       	begin
 	      	if board.can_move_more?(@selected_moves)
-	      		puts "can move more"
 	      		board.select_pos(@color, @selected_moves)
 	      		return nil
 	      	else
-	      		puts "returning moves"
 	      		return @selected_moves
 	      	end
 	  	rescue InvalidMoveError

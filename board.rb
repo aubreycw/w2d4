@@ -17,8 +17,7 @@ class Board
 	end
 
 	def select_pos(color, moves)
-		crow, ccol = @cursor_pos
-		if [color, :none].include?(@grid[crow][ccol].color)
+		if [color, :none].include?(self[@cursor_pos].color)
 			@selected_pos = @cursor_pos
 			update_possible_moves(moves)
 		end
@@ -26,13 +25,11 @@ class Board
 
 	def update_possible_moves(moves)
 		if moves == []
-			row, col = @selected_pos
-			@possible_moves = @grid[row][col].moves
+			@possible_moves = self[@selected_pos].moves
 		else
-			last_row, last_col = moves.last.last
 			test_board = self.deep_dup
 			test_board.do_moves!(moves)
-			@possible_moves = test_board.grid[last_row][last_col].moves
+			@possible_moves = test_board[moves.last.last].moves
 		end
 	end
 
@@ -78,11 +75,9 @@ class Board
 		end
 
 		#checks if there are any more jumps
-		puts [last_row, last_col].to_s
 		test_board = self.deep_dup
 		test_board.do_moves!(moves)
-		moves = test_board.grid[last_row][last_col].moves
-		puts moves.to_s
+		moves = test_board[moves.last.last].moves
 		moves.select do |move| 
 			(last_row - move[0]).abs == 2  && (last_col - move[1]).abs == 2 
 		end != []
@@ -116,20 +111,16 @@ class Board
 	end
 
 	def move_piece(origin, dest)
-		ro, co = origin
-		@grid[ro][co].perform_move(dest)
+		self[origin].perform_move(dest)
 	end
 
 	def move_piece!(origin, dest)
-		rd, cd = dest
-		ro, co = origin
-		self.grid[rd][cd] = self.grid[ro][co]
-		self.grid[ro][co] = EmptyPiece.new
+		self[dest] = self[origin]
+		self[origin] = EmptyPiece.new
 	end
 
 	def take_piece!(pos)
-		r, c = pos
-		self.grid[r][c] = EmptyPiece.new
+		self[pos] = EmptyPiece.new
 		@turns_with_no_takes = 0
 	end
 
@@ -181,22 +172,31 @@ class Board
 		@grid.flatten.all? { |piece| piece.has_no_moves(color) }
 	end
 
-  def deep_dup
-    test_board = Board.new
-    grid.each_with_index do |row, ridx|
-      row.each_with_index do |elem, cidx|
-        test_board.grid[ridx][cidx] = elem.dup(test_board)
-      end
-    end
-	test_board
-  end
+  	def deep_dup
+    	test_board = Board.new
+    	grid.each_with_index do |row, ridx|
+      		row.each_with_index do |elem, cidx|
+        		test_board[[ridx,cidx]] = elem.dup(test_board)
+      		end
+    	end
+		test_board
+  	end
 
-  def grid
-  	@grid
-  end
+  	def grid
+  		@grid
+  	end
 
-  def empty?(pos)
-  	row, col = pos
-  	@grid[row][col].empty?
-  end
+  	def empty?(pos)
+  		self[pos].empty?
+  	end
+
+    def [](pos)
+    	row, col = pos
+    	@grid[row][col]
+ 	 end
+
+  	def []=(pos, input)
+    	row, col = pos
+    	@grid[row][col] = input
+  	end
 end
